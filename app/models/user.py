@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy import Boolean, DateTime, Enum, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped,mapped_column
+from sqlalchemy.orm import Mapped,mapped_column,relationship
 
 from database.base import Base
 from app.enums.user_role import UserRole
@@ -59,6 +59,7 @@ class User(Base):
         default=True
     )
 
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         nullable=False,
@@ -70,6 +71,11 @@ class User(Base):
         nullable=False,
         default=datetime.utcnow,
         onupdate=datetime.utcnow
+    )
+
+    #one user has  many  events
+    events : Mapped[list["Event"]] = relationship(
+        back_populates="organizer"
     )
 
 

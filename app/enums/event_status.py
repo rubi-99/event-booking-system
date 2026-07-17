@@ -1,0 +1,19 @@
+from enum import Enum
+
+
+class EventCategory(str, Enum):
+    MUSIC = "MUSIC"
+    SPORTS = "SPORTS"
+    EDUCATION = "EDUCATION"
+    BUSINESS = "BUSINESS"
+    TECHNOLOGY = "TECHNOLOGY"
+    WORKSHOP = "WORKSHOP"
+    SEMINAR = "SEMINAR"
+    CONFERENCE = "CONFERENCE"
+    CULTURAL = "CULTURAL"
+    FOOD = "FOOD"
+    ART = "ART"
+    COMEDY = "COMEDY"
+    CHARITY = "CHARITY"
+    HEALTH = "HEALTH"
+    OTHER = "OTHER"

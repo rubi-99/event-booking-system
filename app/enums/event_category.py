@@ -1,0 +1,10 @@
+from enum import Enum
+
+
+class EventStatus(str, Enum):
+    DRAFT = "DRAFT"
+    PUBLISHED = "PUBLISHED"
+    REGISTRATION_CLOSED = "REGISTRATION_CLOSED"
+    SOLD_OUT = "SOLD_OUT"
+    CANCELLED = "CANCELLED"
+    COMPLETED = "COMPLETED"
