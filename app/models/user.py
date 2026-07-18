@@ -78,4 +78,8 @@ class User(Base):
         back_populates="organizer"
     )
 
+    bookings : Mapped[list["Booking"]] = relationship(
+        back_populates= "user"
+    )
+
 

@@ -1,19 +1,9 @@
 from enum import Enum
 
-
-class EventCategory(str, Enum):
-    MUSIC = "MUSIC"
-    SPORTS = "SPORTS"
-    EDUCATION = "EDUCATION"
-    BUSINESS = "BUSINESS"
-    TECHNOLOGY = "TECHNOLOGY"
-    WORKSHOP = "WORKSHOP"
-    SEMINAR = "SEMINAR"
-    CONFERENCE = "CONFERENCE"
-    CULTURAL = "CULTURAL"
-    FOOD = "FOOD"
-    ART = "ART"
-    COMEDY = "COMEDY"
-    CHARITY = "CHARITY"
-    HEALTH = "HEALTH"
-    OTHER = "OTHER"
+class EventStatus(str, Enum):
+    DRAFT = "DRAFT"
+    PUBLISHED = "PUBLISHED"
+    REGISTRATION_CLOSED = "REGISTRATION_CLOSED"
+    SOLD_OUT = "SOLD_OUT"
+    CANCELLED = "CANCELLED"
+    COMPLETED = "COMPLETED"    

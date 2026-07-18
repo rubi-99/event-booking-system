@@ -21,14 +21,13 @@ class Event(Base):
     )
 
     title: Mapped[str] = mapped_column(
-        String(70),
+        String(200),
         nullable=False
     )
 
     category : Mapped[EventCategory] = mapped_column(
         Enum(EventCategory),
         nullable=False,
-        default=EventCategory.COMEDY
     )
 
     description : Mapped[str | None] = mapped_column(
@@ -89,6 +88,10 @@ class Event(Base):
 #many event has one user
     organizer  : Mapped["User"]= relationship(
         back_populates="events"
+    )
+
+    bookings : Mapped[list["Booking"]] = relationship(
+        back_populates="event"
     )
 
 
