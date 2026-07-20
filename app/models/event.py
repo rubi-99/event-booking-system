@@ -1,4 +1,4 @@
-from database.base import Base
+from app.database.base import Base
 from app.enums.event_status import EventStatus
 from app.enums.event_category import EventCategory
 
@@ -39,7 +39,7 @@ class Event(Base):
     status : Mapped[EventStatus] = mapped_column(
         Enum(EventStatus),
         nullable=False,
-        default=EventStatus.CREATED
+        default=EventStatus.PUBLISHED
     )
 
     price : Mapped[int] = mapped_column(
