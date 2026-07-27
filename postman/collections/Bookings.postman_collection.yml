@@ -1,0 +1,166 @@
+info:
+  name: EMS - Bookings
+  description: |
+    Booking management endpoints.
+    Authenticated users can create bookings, list their own bookings, and cancel them.
+    **ADMIN** users can also refund bookings.
+  schema: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+
+auth:
+  type: bearer
+  bearer:
+    - key: token
+      value: '{{token}}'
+      type: string
+
+variable:
+  - key: base_url
+    value: http://localhost:8000
+    type: string
+  - key: token
+    value: ''
+    type: string
+  - key: event_id
+    value: ''
+    type: string
+  - key: booking_id
+    value: ''
+    type: string
+
+item:
+  - name: POST Create Booking
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 201", function () {'
+            - '  pm.response.to.have.status(201);'
+            - '});'
+            - 'pm.test("Booking was created", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json).to.have.property("id");'
+            - '  pm.expect(json).to.have.property("status");'
+            - '  pm.expect(json).to.have.property("num_tickets");'
+            - '  pm.expect(json).to.have.property("total_price");'
+            - '  pm.expect(json).to.have.property("event");'
+            - '  pm.expect(json).to.have.property("user");'
+            - '  pm.collectionVariables.set("booking_id", json.id);'
+            - '});'
+          type: text/javascript
+    request:
+      method: POST
+      header:
+        - key: Content-Type
+          value: application/json
+        - key: Accept
+          value: application/json
+      body:
+        mode: raw
+        raw: >-
+          {
+            "event_id": "{{event_id}}",
+            "num_tickets": 2
+          }
+      url:
+        raw: '{{base_url}}/bookings'
+        host: ['{{base_url}}']
+        path:
+          - bookings
+    response: []
+
+  - name: GET My Bookings
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Response is an array", function () {'
+            - '  pm.expect(pm.response.json()).to.be.an("array");'
+            - '});'
+          type: text/javascript
+    request:
+      method: GET
+      header: []
+      url:
+        raw: '{{base_url}}/bookings/my'
+        host: ['{{base_url}}']
+        path:
+          - bookings
+          - my
+    response: []
+
+  - name: GET Booking By ID
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Booking matches requested ID", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json.id).to.eql(pm.collectionVariables.get("booking_id"));'
+            - '});'
+          type: text/javascript
+    request:
+      method: GET
+      header: []
+      url:
+        raw: '{{base_url}}/bookings/{{booking_id}}'
+        host: ['{{base_url}}']
+        path:
+          - bookings
+          - '{{booking_id}}'
+    response: []
+
+  - name: POST Cancel Booking
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Booking was cancelled", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json.status).to.eql("cancelled");'
+            - '});'
+          type: text/javascript
+    request:
+      method: POST
+      header: []
+      url:
+        raw: '{{base_url}}/bookings/{{booking_id}}/cancel'
+        host: ['{{base_url}}']
+        path:
+          - bookings
+          - '{{booking_id}}'
+          - cancel
+    response: []
+
+  - name: POST Refund Booking (Admin)
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Booking was refunded", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json.status).to.eql("refunded");'
+            - '});'
+          type: text/javascript
+    request:
+      method: POST
+      header: []
+      url:
+        raw: '{{base_url}}/bookings/{{booking_id}}/refund'
+        host: ['{{base_url}}']
+        path:
+          - bookings
+          - '{{booking_id}}'
+          - refund
+    response: []

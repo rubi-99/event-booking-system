@@ -1,0 +1,37 @@
+info:
+  name: EMS - Health
+  description: Endpoints to verify the API is running.
+  schema: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+
+auth:
+  type: noauth
+
+variable:
+  - key: base_url
+    value: http://localhost:8000
+    type: string
+
+item:
+  - name: GET Root (Health Check)
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Response has status and message", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json).to.have.property("status");'
+            - '  pm.expect(json).to.have.property("message");'
+            - '});'
+          type: text/javascript
+    request:
+      method: GET
+      header: []
+      url:
+        raw: '{{base_url}}/'
+        host: ['{{base_url}}']
+        path:
+          - ''
+    response: []

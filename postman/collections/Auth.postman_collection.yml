@@ -1,0 +1,187 @@
+info:
+  name: EMS - Auth
+  description: |
+    Authentication and user management endpoints.
+    Use **POST Signup** or **POST Login** to obtain a JWT token.
+    The token is automatically saved to the `token` collection variable.
+  schema: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+
+auth:
+  type: bearer
+  bearer:
+    - key: token
+      value: '{{token}}'
+      type: string
+
+variable:
+  - key: base_url
+    value: http://localhost:8000
+    type: string
+  - key: token
+    value: ''
+    type: string
+  - key: user_id
+    value: ''
+    type: string
+
+item:
+  - name: POST Signup
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 201", function () {'
+            - '  pm.response.to.have.status(201);'
+            - '});'
+            - 'pm.test("Response has user details", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json).to.have.property("id");'
+            - '  pm.expect(json).to.have.property("email");'
+            - '  pm.collectionVariables.set("user_id", json.id);'
+            - '});'
+          type: text/javascript
+    request:
+      method: POST
+      header:
+        - key: Content-Type
+          value: application/json
+        - key: Accept
+          value: application/json
+      body:
+        mode: raw
+        raw: >-
+          {
+            "email": "user@example.com",
+            "password": "securepassword123",
+            "first_name": "John",
+            "last_name": "Doe",
+            "role": "user"
+          }
+      url:
+        raw: '{{base_url}}/auth/signup'
+        host: ['{{base_url}}']
+        path:
+          - auth
+          - signup
+    response: []
+
+  - name: POST Login
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Response has access_token and user", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json).to.have.property("access_token");'
+            - '  pm.expect(json).to.have.property("token_type");'
+            - '  pm.expect(json).to.have.property("user");'
+            - '  pm.collectionVariables.set("token", json.access_token);'
+            - '  pm.collectionVariables.set("user_id", json.user.id);'
+            - '});'
+          type: text/javascript
+    request:
+      method: POST
+      header:
+        - key: Content-Type
+          value: application/json
+        - key: Accept
+          value: application/json
+      body:
+        mode: raw
+        raw: >-
+          {
+            "email": "user@example.com",
+            "password": "securepassword123"
+          }
+      url:
+        raw: '{{base_url}}/auth/login'
+        host: ['{{base_url}}']
+        path:
+          - auth
+          - login
+    response: []
+
+  - name: GET Me (Profile)
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Response has current user details", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json).to.have.property("id");'
+            - '  pm.expect(json).to.have.property("email");'
+            - '});'
+          type: text/javascript
+    request:
+      method: GET
+      header:
+        - key: Accept
+          value: application/json
+      url:
+        raw: '{{base_url}}/auth/me'
+        host: ['{{base_url}}']
+        path:
+          - auth
+          - me
+    response: []
+
+  - name: PUT Update Profile
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Profile was updated", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json.first_name).to.eql("Jane");'
+            - '});'
+          type: text/javascript
+    request:
+      method: PUT
+      header:
+        - key: Content-Type
+          value: application/json
+        - key: Accept
+          value: application/json
+      body:
+        mode: raw
+        raw: >-
+          {
+            "first_name": "Jane",
+            "last_name": "Doe"
+          }
+      url:
+        raw: '{{base_url}}/auth/me'
+        host: ['{{base_url}}']
+        path:
+          - auth
+          - me
+    response: []
+
+  - name: POST Logout
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 204", function () {'
+            - '  pm.response.to.have.status(204);'
+            - '});'
+          type: text/javascript
+    request:
+      method: POST
+      header: []
+      url:
+        raw: '{{base_url}}/auth/logout'
+        host: ['{{base_url}}']
+        path:
+          - auth
+          - logout
+    response: []

@@ -1,0 +1,164 @@
+info:
+  name: EMS - Venues
+  description: |
+    Venue CRUD endpoints.
+    Venues can only be created, updated, and deleted by **ADMIN** users.
+    All other endpoints are public.
+  schema: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+
+auth:
+  type: bearer
+  bearer:
+    - key: token
+      value: '{{token}}'
+      type: string
+
+variable:
+  - key: base_url
+    value: http://localhost:8000
+    type: string
+  - key: token
+    value: ''
+    type: string
+  - key: venue_id
+    value: ''
+    type: string
+
+item:
+  - name: GET List All Venues
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Response is an array", function () {'
+            - '  pm.expect(pm.response.json()).to.be.an("array");'
+            - '});'
+          type: text/javascript
+    request:
+      method: GET
+      header: []
+      url:
+        raw: '{{base_url}}/venues'
+        host: ['{{base_url}}']
+        path:
+          - venues
+    response: []
+
+  - name: POST Create Venue
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 201", function () {'
+            - '  pm.response.to.have.status(201);'
+            - '});'
+            - 'pm.test("Venue was created", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json).to.have.property("id");'
+            - '  pm.expect(json.name).to.eql("Grand Hall");'
+            - '  pm.collectionVariables.set("venue_id", json.id);'
+            - '});'
+          type: text/javascript
+    request:
+      method: POST
+      header:
+        - key: Content-Type
+          value: application/json
+        - key: Accept
+          value: application/json
+      body:
+        mode: raw
+        raw: >-
+          {
+            "name": "Grand Hall",
+            "location": "123 Main Street, New York, NY",
+            "capacity": 500
+          }
+      url:
+        raw: '{{base_url}}/venues'
+        host: ['{{base_url}}']
+        path:
+          - venues
+    response: []
+
+  - name: GET Venue By ID
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Venue matches requested ID", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json.id).to.eql(pm.collectionVariables.get("venue_id"));'
+            - '});'
+          type: text/javascript
+    request:
+      method: GET
+      header: []
+      url:
+        raw: '{{base_url}}/venues/{{venue_id}}'
+        host: ['{{base_url}}']
+        path:
+          - venues
+          - '{{venue_id}}'
+    response: []
+
+  - name: PUT Update Venue
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 200", function () {'
+            - '  pm.response.to.have.status(200);'
+            - '});'
+            - 'pm.test("Venue was updated", function () {'
+            - '  var json = pm.response.json();'
+            - '  pm.expect(json.name).to.eql("Grand Hall VIP");'
+            - '});'
+          type: text/javascript
+    request:
+      method: PUT
+      header:
+        - key: Content-Type
+          value: application/json
+        - key: Accept
+          value: application/json
+      body:
+        mode: raw
+        raw: >-
+          {
+            "name": "Grand Hall VIP",
+            "capacity": 400
+          }
+      url:
+        raw: '{{base_url}}/venues/{{venue_id}}'
+        host: ['{{base_url}}']
+        path:
+          - venues
+          - '{{venue_id}}'
+    response: []
+
+  - name: DELETE Venue
+    event:
+      - listen: test
+        script:
+          exec:
+            - 'pm.test("Status code is 204", function () {'
+            - '  pm.response.to.have.status(204);'
+            - '});'
+          type: text/javascript
+    request:
+      method: DELETE
+      header: []
+      url:
+        raw: '{{base_url}}/venues/{{venue_id}}'
+        host: ['{{base_url}}']
+        path:
+          - venues
+          - '{{venue_id}}'
+    response: []
