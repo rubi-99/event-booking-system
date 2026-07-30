@@ -36,6 +36,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
     limits \
     redis
 
+RUN pip install --no-cache-dir email-validator "pydantic[email]" python-multipart
+
 # Copy application source code
 COPY app /app/app
 
