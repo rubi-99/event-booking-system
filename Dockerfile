@@ -24,6 +24,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
     sqlalchemy \
     asyncpg \
     pydantic \
+    "pydantic[email]" \
+    email-validator \
+    python-multipart \
     pydantic-settings \
     pyjwt \
     cryptography \
