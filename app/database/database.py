@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from app.config import settings
 
@@ -38,3 +39,11 @@ async def init_db() -> None:
     
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # Add columns that may be missing from existing tables
+        for stmt in [
+            "ALTER TABLE bookings ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ",
+        ]:
+            try:
+                await conn.execute(text(stmt))
+            except Exception:
+                pass

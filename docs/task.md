@@ -1,0 +1,27 @@
+# Task List: Event Management Backend
+
+- [x] **Step 1: Environment & Project Setup**
+  - [x] Initialize project with `uv`
+  - [x] Install essential dependencies (`fastapi`, `uvicorn`, `sqlalchemy`, `asyncpg`, `pydantic-settings`, `supabase`, `pytest`)
+  - [x] Configure environment variables in `.env`
+- [x] **Step 2: Core Database Setup**
+  - [x] Create settings management in `app/config/config.py`
+  - [x] Create `app/base.py` for declarative base
+  - [x] Create async session configuration in `app/database/database.py`
+- [x] **Step 3: User Authentication & Profile (Supabase Auth integration)**
+  - [x] Create User roles enum in `app/enums/roles.py`
+  - [x] Create User model in `app/models/user.py` and register in database
+  - [x] Create Pydantic schemas in `app/schemas/user.py`
+  - [x] Create database queries in `app/repositories/user_repository.py`
+  - [x] Create user service operations in `app/services/user_service.py`
+  - [x] Create auth routing in `app/routers/auth.py`
+  - [x] Mount routers and test API locally
+- [x] **Step 4: Venues & Events Management**
+  - [x] Implement Venue models and CRUD
+  - [x] Implement Event models, CRUD, Search/Filter with index tuning
+- [x] **Step 5: Booking Engine & Concurrency Control**
+  - [x] Implement Booking and Payment models
+  - [x] Build Booking Service with `SELECT FOR UPDATE` transaction locking
+  - [x] Simulate concurrent traffic to test locking mechanism
+- [x] **Step 6: Admin Moderation & Operations**
+  - [x] Build moderation endpoints and dashboard statistics
