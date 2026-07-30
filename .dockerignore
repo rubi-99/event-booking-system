@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.git/
+.gitignore
+frontend/
+logs/
+tasks/
+scratch/
+.env
+.env.local
+node_modules/
+dist/
