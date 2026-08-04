@@ -20,7 +20,7 @@ COPY pyproject.toml ./
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir \
     fastapi \
-    uvicorn[standard] \
+    "uvicorn[standard]" \
     sqlalchemy \
     asyncpg \
     pydantic \
@@ -28,6 +28,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     email-validator \
     python-multipart \
     pydantic-settings \
+    "python-jose[cryptography]" \
     pyjwt \
     cryptography \
     httpx \
@@ -35,8 +36,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
     slowapi \
     limits \
     redis
-
-RUN pip install --no-cache-dir email-validator "pydantic[email]" python-multipart
 
 # Copy application source code
 COPY app /app/app
